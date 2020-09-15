@@ -12,7 +12,12 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
+// どのページでも認証チェックをするミドルウェア
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+// 会員登録           ULI  ->  action  ->  page
+Route::post('/register', 'Auth\RegisterController@register')->name('register');
+// ログイン
+Route::post('/login', 'Auth\LoginController@login')->name('login');

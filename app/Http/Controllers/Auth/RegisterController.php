@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Http\Request; // ★ 追加
 
 class RegisterController extends Controller
 {
@@ -39,6 +40,16 @@ class RegisterController extends Controller
     {
         $this->middleware('guest');
     }
+
+    /**
+     * Response a registered user.
+     * RegisterControllerにあるメソッド
+     */
+     // ★ メソッド追加
+     protected function registered(Request $request, $user)
+     {
+         return $user;
+     }
 
     /**
      * Get a validator for an incoming registration request.
