@@ -37,9 +37,29 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
-    // ★ テスト用メソッド追加
+    // ★ テスト用メソッド追加 ==============================================
+    /**
+     * ログインテスト
+     *
+     * @param Request $request
+     * @param [type] $user
+     * @return void
+     */
     protected function authenticated(Request $request, $user)
     {
         return $user;
+    }
+    /**
+     * ログアウトテスト
+     *
+     * @param Request $request
+     * @return void
+     */
+    protected function loggedOut(Request $request)
+    {
+    // セッションを再生成する
+    $request->session()->regenerate();
+
+    return response()->json();
     }
 }

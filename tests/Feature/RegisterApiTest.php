@@ -17,13 +17,16 @@ class RegisterApiTest extends TestCase
      *
      * @return void
      */
-    public function testExample()
+    public function testEx()
     {
         $response = $this->get('/');
 
         $response->assertStatus(200);
     }
-    public function should_新しいユーザーを作成して返却する()
+    /**
+     * _新しいユーザーを作成して返却する
+     */
+    public function testShould_新しいユーザーを作成して返却する()
     {
         $data = [
             'name' => 'vuesplash user',
