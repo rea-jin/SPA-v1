@@ -23,7 +23,8 @@
         "sass-loader": "^7.1.0",
         "vue": "^2.6.11",
         "vue-router": "^3.4.3",
-        "vue-template-compiler": "^2.6.11"
+        "vue-template-compiler": "^2.6.11",
+        "vuex": "^3.5.1"
     },
     "dependencies": {
         "cross-env": "^7.0.2",
