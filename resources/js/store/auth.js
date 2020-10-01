@@ -3,7 +3,13 @@ const state = {
   user: null
 }
 
-const getters = {}
+const getters = {
+  // 確実に真偽値を返すために二重否定
+  check: state => !! state.user,
+  // username はログインユーザーの name
+  // user が null の場合にエラーが発生しないよう空文字を返す
+  username: state => state.user ? state.user.name : ''
+}
 
 const mutations = {
   // user ステートの値を更新する setUser を追加  ミューテーションの第一引数は必ずステート
