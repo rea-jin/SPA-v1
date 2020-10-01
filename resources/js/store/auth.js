@@ -30,10 +30,16 @@ const actions = {
     const response = await axios.post('/api/login', data)
     context.commit('setUser', response.data)
   },
-  // 
+  // ログアウト
   async logout (context) {
     const response = await axios.post('/api/logout')
     context.commit('setUser', null)
+  },
+  // 起動時のログインチェック
+  async currentUser (context) {
+    const response = await axios.get('/api/user')
+    const user = response.data || null
+    context.commit('setUser', user)
   }
 }
 
