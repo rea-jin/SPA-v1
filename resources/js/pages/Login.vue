@@ -15,6 +15,16 @@
     <div class="panel" v-show="tab === 1">
       <!-- Login Form -->
       <form class="form" @submit.prevent="login">
+        <!-- エラーメッセージ表示 -->
+        <div v-if="loginErrors" class="errors">
+          <ul v-if="loginErrors.email">
+            <li v-for="msg in loginErrors.email" :key="msg">{{ msg }}</li>
+          </ul>
+          <ul v-if="loginErrors.password">
+            <li v-for="msg in loginErrors.password" :key="msg">{{ msg }}</li>
+          </ul>
+        </div>
+
         <label for="login-email">Email</label>
         <!-- v-modelでdataに紐付ける -->
         <input type="text" class="form__item" id="login-email" v-model="loginForm.email">
@@ -74,10 +84,28 @@ export default {
     async login () {
     // authストアのloginアクションを呼び出す
     await this.$store.dispatch('auth/login', this.loginForm)
-    // トップページに移動する
-    this.$router.push('/')
-    // console.log(this.loginForm)
+
+      if(this.apiStatus){
+        // トップページに移動する
+        this.$router.push('/')
+        // console.log(this.loginForm)
+      }
     },
+    clearError () {
+    this.$store.commit('auth/setLoginErrorMessages', null)
+    },
+    created () {
+    this.clearError()
+    }
+  },
+  computed: {
+  apiStatus () {
+    return this.$store.state.auth.apiStatus
+  },
+  loginErrors () {
+    return this.$store.state.auth.loginErrorMessages
   }
+},
+
 }
 </script>

@@ -8,17 +8,20 @@ import Login from './pages/Login.vue'
 // authストアのcheckゲッターを使用するため
 import store from './store' 
 
+// エラーコンポーネントのインポート
+import SystemError from './pages/errors/System.vue'
+
 // VueRouterプラグインを使用する
 // これによって<RouterView />コンポーネントなどを使うことができる
 Vue.use(VueRouter)
 
 // パスとコンポーネントのマッピング
 const routes = [
-  {
+  { // topルートはListコンポーネント
     path: '/',
     component: List
   },
-  {
+  { // ログインルートの時はログインコンポーネント
     path: '/login',
     component: Login,
     // (ルートオブジェクト、アクセス元、ページ移動先)
@@ -29,7 +32,11 @@ const routes = [
         next() // ページコンポーネントが切り替わる
       }
     }
-  }
+  },
+  { //500エラーの時はエラーコンポーネント
+    path: '/500',
+    component: SystemError
+  },
 ]
 
 // VueRouterインスタンスを作成する
@@ -37,6 +44,7 @@ const router = new VueRouter({
     mode: 'history', // ★ urlの#をなくす
   routes
 })
+
 
 // VueRouterインスタンスをエクスポートする
 // app.jsでインポートするため
