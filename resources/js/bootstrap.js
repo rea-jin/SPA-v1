@@ -35,6 +35,11 @@ window.axios.interceptors.request.use(config => {
   
     return config
   })
+// responseはレスポンスを受けた後処理を上書き
+window.axios.interceptors.response.use(
+  response => response, // 成功
+  error => error.response || error //失敗
+)
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
  * for events that are broadcast by Laravel. Echo and event broadcasting

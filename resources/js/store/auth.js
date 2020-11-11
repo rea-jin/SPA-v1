@@ -1,11 +1,12 @@
 // import { OK } from '../util'
-import { OK, UNPROCESSABLE_ENTITY } from '../util'
+import { OK,  CREATED, UNPROCESSABLE_ENTITY } from '../util'
 
 // ログイン済みユーザーを保持する
 const state = {
   user: null,
   apiStatus: null, // これを参照して後の処理を行うか判別
-  loginErrorMessages: null // エラーメッセージを入れるステート
+  loginErrorMessages: null, // エラーメッセージを入れるステート
+  registerErrorMessages: null
 }
 
 const getters = {
@@ -25,9 +26,13 @@ const mutations = {
   setApiStatus(state, status){
     state.apiStatus = status
   },
-  // ステートのためのミューテーション
+  // ログインエラーのステートのためのミューテーション
   setLoginErrorMessages (state, messages) {
     state.loginErrorMessages = messages
+  },
+  // 登録時のエラーのステート
+  setRegisterErrorMessages (state, messages) {
+    state.registerErrorMessages = messages
   }
 }
 
@@ -35,9 +40,22 @@ const actions = {
   // アクションの第一引数にはコンテキストオブジェクトが渡される
   //  登録  =====================================
   async register (context, data) {
+    context.commit('setApiStatus', null)
     const response = await axios.post('/api/register', data)
-    context.commit('setUser', response.data)
-  },
+    // レスポンスが成功した場合、
+    if (response.status === CREATED) {
+      context.commit('setApiStatus', true)
+      context.commit('setUser', response.data)
+      return false
+    }
+    context.commit('setApiStatus', false)
+    // 失敗した場合
+    if (response.status === UNPROCESSABLE_ENTITY) {
+      context.commit('setRegisterErrorMessages', response.data.errors)
+      } else {
+        context.commit('error/setCode', response.status, { root: true })
+      }
+    },
   // ログイン  ===================================
   async login (context, data) {
     context.commit('setApiStatus', null)
@@ -66,14 +84,30 @@ const actions = {
 
   // ログアウト
   async logout (context) {
+    context.commit('setApiStatus', null)
     const response = await axios.post('/api/logout')
-    context.commit('setUser', null)
+
+    if (response.status === OK) {
+      context.commit('setApiStatus', true)
+      context.commit('setUser', null)
+      return false
+    }
+    context.commit('setApiStatus', false)
+    context.commit('error/setCode', response.status, { root: true })
   },
+
   // 起動時のログインチェック
   async currentUser (context) {
+    context.commit('setApiStatus', null)
     const response = await axios.get('/api/user')
     const user = response.data || null
-    context.commit('setUser', user)
+    if (response.status === OK) {
+      context.commit('setApiStatus', true)
+      context.commit('setUser', user)
+      return false
+    }
+    context.commit('setApiStatus', false)
+    context.commit('error/setCode', response.status, { root: true })
   }
 }
 
