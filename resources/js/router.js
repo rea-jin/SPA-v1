@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 // ページコンポーネントをインポートする
-import List from './pages/List.vue'
+import Item from './pages/Item.vue'
 import Login from './pages/Login.vue'
 
 // authストアのcheckゲッターを使用するため
@@ -17,9 +17,9 @@ Vue.use(VueRouter)
 
 // パスとコンポーネントのマッピング
 const routes = [
-  { // topルートはListコンポーネント
+  { // topルートはItemコンポーネント
     path: '/',
-    component: List
+    component: Item
   },
   { // ログインルートの時はログインコンポーネント
     path: '/login',
