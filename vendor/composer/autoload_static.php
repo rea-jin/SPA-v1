@@ -4095,6 +4095,7 @@ class ComposerStaticInit150fac6baa6293ee633ad2649268ad5d
         'Tests\\Feature\\LoginApiTest' => __DIR__ . '/../..' . '/tests/Feature/LoginApiTest.php',
         'Tests\\Feature\\LogoutApiTest' => __DIR__ . '/../..' . '/tests/Feature/LogoutApiTest.php',
         'Tests\\Feature\\RegisterApiTest' => __DIR__ . '/../..' . '/tests/Feature/RegisterApiTest.php',
+        'Tests\\Feature\\UserApiTest' => __DIR__ . '/../..' . '/tests/Feature/UserApiTest.php',
         'Tests\\TestCase' => __DIR__ . '/../..' . '/tests/TestCase.php',
         'Tests\\Unit\\ExampleTest' => __DIR__ . '/../..' . '/tests/Unit/ExampleTest.php',
         'Text_Template' => __DIR__ . '/..' . '/phpunit/php-text-template/src/Template.php',

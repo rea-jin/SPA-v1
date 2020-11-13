@@ -3703,6 +3703,7 @@ return array(
     'Tests\\Feature\\LoginApiTest' => $baseDir . '/tests/Feature/LoginApiTest.php',
     'Tests\\Feature\\LogoutApiTest' => $baseDir . '/tests/Feature/LogoutApiTest.php',
     'Tests\\Feature\\RegisterApiTest' => $baseDir . '/tests/Feature/RegisterApiTest.php',
+    'Tests\\Feature\\UserApiTest' => $baseDir . '/tests/Feature/UserApiTest.php',
     'Tests\\TestCase' => $baseDir . '/tests/TestCase.php',
     'Tests\\Unit\\ExampleTest' => $baseDir . '/tests/Unit/ExampleTest.php',
     'Text_Template' => $vendorDir . '/phpunit/php-text-template/src/Template.php',
