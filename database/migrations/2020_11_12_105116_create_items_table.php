@@ -19,7 +19,7 @@ class CreateItemsTable extends Migration
             $table->string('filename');
             $table->timestamps();
             //外部キー制約 できない??
-            $table->foreign('user_id')->references('id')->on('users'); 
+            // $table->foreign('user_id')->references('id')->on('users'); 
             // ->constrained()
             // ->cascadeOnDelete()  // ON DELETE で CASCADE
             // ->cascadeOnUpdate(); // ON UPDATE で CASCADE;
