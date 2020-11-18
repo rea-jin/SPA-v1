@@ -15,12 +15,12 @@ class LoginApiTest extends TestCase
      *
      * @return void
      */
-    public function testExample()
-    {
-        $response = $this->get('/');
+    // public function testExample()
+    // {
+    //     $response = $this->get('/');
 
-        $response->assertStatus(200);
-    }
+    //     $response->assertStatus(200);
+    // }
     /**
      * making test user
      *
@@ -38,7 +38,7 @@ class LoginApiTest extends TestCase
      * @test
      * _登録済みのユーザーを認証して返却する
      */
-    public function should2()
+    public function should_登録済みのユーザーを認証して返却する()
     {
         $response = $this->json('POST', route('login'), [
             'email' => $this->user->email,

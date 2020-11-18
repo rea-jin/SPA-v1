@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddUserIdToItems extends Migration
+class CreateMessagesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,14 @@ class AddUserIdToItems extends Migration
      */
     public function up()
     {
-        Schema::table('items', function (Blueprint $table) {
-            //
-            DB::statement('DELETE FROM items');
-            // $table->dropColumn('user_id');
-            $table->unsignedBigInteger('user_id');
+        Schema::create('messages', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('item_id');
+            $table->bigInteger('user_id')->unsigned();
+            $table->text('content');
+            $table->timestamps();
+    
+            $table->foreign('item_id')->references('id')->on('items');
             $table->foreign('user_id')->references('id')->on('users');
         });
     }
@@ -29,10 +32,6 @@ class AddUserIdToItems extends Migration
      */
     public function down()
     {
-        Schema::table('items', function (Blueprint $table) {
-            //
-            $table->dropForeign(['user_id']);
-            $table->dropColumn('user_id');
-        });
+        Schema::dropIfExists('messages');
     }
 }

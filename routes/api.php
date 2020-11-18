@@ -26,3 +26,6 @@ Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
 
 // ログインユーザー
 Route::get('/user', fn() => Auth::user())->name('user');
+
+// 商品投稿
+Route::post('/items', 'ItemController@create')->name('item.create');
