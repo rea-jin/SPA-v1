@@ -3,6 +3,12 @@
     <h2 class="title">Submit a Item</h2>
     <!-- ファイル送信 -->
     <form class="form" @submit.prevent ="submit">
+      <!-- エラー表示 -->
+      <div class="errors" v-if="errors">
+        <ul v-if="errors.photo">
+          <li v-for="msg in errors.photo" :key="msg">{{ msg }}</li>
+        </ul>
+      </div>
       <!-- 画像のプレビュー機能 @changeによりメソッドはしる -->
       <input class="form__item" type="file" @change="onFileChange">
       <!-- dataプロパティのpreviewが入った場合出力される -->
@@ -17,6 +23,9 @@
 </template>
 
 <script>
+// レスポンスを返せない時の処理 utilからインポート
+import { CREATED, UNPROCESSABLE_ENTITY } from '../util'
+
 export default {
   props: {
     value: {
@@ -27,7 +36,8 @@ export default {
   data () {
     return {
       preview: null,
-      item: null // ★ 追加
+      item: null, // ★ 追加
+      errors:null
     }
   },
   methods:{
@@ -63,20 +73,29 @@ export default {
     },
     
      // 入力欄の値とプレビュー表示をクリアするメソッド
-  reset () {
-    this.preview = ''
-    this.item = null // ★ 追加
-    this.$el.querySelector('input[type="file"]').value = null
-  },
-  async submit () {
-    const formData = new FormData()
-    formData.append('item', this.item)
-    const response = await axios.post('/api/items', formData)
-
-    this.reset()
-    this.$emit('input', false)
-    this.$router.push(`/photos/${response.data.id}`)
-  }
+    reset () {
+      this.preview = ''
+      this.item = null // ★ 追加
+      this.$el.querySelector('input[type="file"]').value = null
+    },
+    async submit () {
+      const formData = new FormData()
+      formData.append('item', this.item)
+      const response = await axios.post('/api/items', formData)
+      // バリデーションエラーの時
+      if (response.status === UNPROCESSABLE_ENTITY) {
+        this.errors = response.data.errors
+        return false
+      }
+      this.reset()
+      this.$emit('input', false)
+      // データが作成されない時のエラー
+      if (response.status !== CREATED) {
+        this.$store.commit('error/setCode', response.status)
+        return false
+      }
+      this.$router.push(`/photos/${response.data.id}`)
+    }
   }
 }
 </script>
