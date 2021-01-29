@@ -11,6 +11,9 @@ import store from './store'
 // エラーコンポーネントのインポート
 import SystemError from './pages/errors/System.vue'
 
+// 詳細ぺーじのコンポーネントをインポート
+import ItemDetail from './pages/ItemDetail.vue'
+
 // VueRouterプラグインを使用する
 // これによって<RouterView />コンポーネントなどを使うことができる
 Vue.use(VueRouter)
@@ -36,6 +39,11 @@ const routes = [
   { //500エラーの時はエラーコンポーネント
     path: '/500',
     component: SystemError
+  },
+  {
+    path: '/items/:id',// idは受け取ったパラメータ
+    component: ItemDetail,
+    props: true
   },
 ]
 
