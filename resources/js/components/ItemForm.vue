@@ -1,8 +1,13 @@
 <template>
   <div class="item-form">
     <h2 class="title">Submit a Item</h2>
-    <!-- ファイル送信 -->
-    <form class="form" @submit.prevent ="submit">
+    <!-- ローディング画面 -->
+    <div v-show="loading" class="panel">
+     <Loader>Sending your photo...</Loader>
+    </div>
+    
+    <!-- ファイル送信 ローディングの間はform画面は消える-->
+    <form v-show="! loading" class="form" @submit.prevent="submit">
       <!-- エラー表示 -->
       <div class="errors" v-if="errors">
         <ul v-if="errors.photo">
@@ -25,6 +30,7 @@
 <script>
 // レスポンスを返せない時の処理 utilからインポート
 import { CREATED, UNPROCESSABLE_ENTITY } from '../util'
+import Loader from './Loader.vue' //ローダー
 
 export default {
   props: {
@@ -37,7 +43,8 @@ export default {
     return {
       preview: null,
       item: null, // ★ 追加
-      errors:null
+      errors:null,
+      loading: false,
     }
   },
   methods:{
@@ -78,10 +85,19 @@ export default {
       this.item = null // ★ 追加
       this.$el.querySelector('input[type="file"]').value = null
     },
+
+// ==================================
+// 非同期送信
+// ==================================
     async submit () {
+      this.loading = true // ローディング表示
+
       const formData = new FormData()
       formData.append('item', this.item)
       const response = await axios.post('/api/items', formData)
+
+      this.loading = false // ローディング非表示
+
       // バリデーションエラーの時
       if (response.status === UNPROCESSABLE_ENTITY) {
         this.errors = response.data.errors
@@ -95,7 +111,23 @@ export default {
         return false
       }
       this.$router.push(`/photos/${response.data.id}`)
+
+      if(response.status !== CREATED){
+        this.$store.commit('error/setCode', response.status)
+        return false
+      }
+      // メッセージ登録
+      this.$store.commit('message/setContent', {
+      content: '画像が投稿されました！',
+      timeout: 5000
+      })
+
+       this.$router.push(`/photos/${response.data.id}`)
     }
-  }
+  },
+  
+  components: {
+    Loader
+  },
 }
 </script>
