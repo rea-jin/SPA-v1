@@ -4,13 +4,10 @@ import VueRouter from 'vue-router'
 // ページコンポーネントをインポートする
 import List from './pages/List.vue'
 import Login from './pages/Login.vue'
-
 // authストアのcheckゲッターを使用するため
 import store from './store' 
-
 // エラーコンポーネントのインポート
 import SystemError from './pages/errors/System.vue'
-
 // 詳細ぺーじのコンポーネントをインポート
 import ItemDetail from './pages/ItemDetail.vue'
 

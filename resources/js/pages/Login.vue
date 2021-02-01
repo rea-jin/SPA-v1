@@ -1,17 +1,21 @@
 <template>
   <div class="container--small">
     <ul class="tab">
-      <li class="tab__item" 
-      @click="tab = 1" :class="{'tab__item--active': tab === 1 }">
-        Login
-      </li>
-      <li class="tab__item" @click="tab = 2">
-        Register
-      </li>
+      <li
+       class="tab__item" 
+       :class="{'tab__item--active': tab === 1 }"
+      @click="tab = 1"
+       >Login</li>
+      <li
+       class="tab__item" 
+       :class="{'tab__item--active': tab === 2 }"
+       @click="tab = 2"
+       >Register</li>
     </ul>
     <!-- tab1 or 2を表示させる -->
     <!-- {{ tab }} これだとここに数字が来る -->
     <!-- v-showでtabの値によって表示を変える -->
+
     <div class="panel" v-show="tab === 1">
     <!-- Login Form -------------------->
       <form class="form" @submit.prevent="login">
@@ -69,8 +73,9 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
-  data(){
+  data () {
     return{
       // tabにデータを渡す。
       tab: 1,
@@ -86,18 +91,32 @@ export default {
       }
     }
   },
-   computed: {
-    apiStatus () {
-      return this.$store.state.auth.apiStatus
-    },
-    loginErrors () {
-      return this.$store.state.auth.loginErrorMessages
-    },
-    registerErrors (){
-      return this.$state.auth.registerErrorMessages
-    }
-  },
+  //  computed: {
+  //   apiStatus () {
+  //     return this.$store.state.auth.apiStatus
+  //   },
+  //   loginErrors () {
+  //     return this.$store.state.auth.loginErrorMessages
+  //   },
+  //   registerErrors (){
+  //     return this.$state.auth.registerErrorMessages
+  //   }
+  // },
+   computed: mapState({
+    apiStatus: state => state.auth.apiStatus,
+    loginErrors: state => state.auth.loginErrorMessages,
+    registerErrors: state => state.auth.registerErrorMessages
+  }),
   methods: {
+    async login () {
+    // authストアのloginアクションを呼び出す
+    await this.$store.dispatch('auth/login', this.loginForm)
+    if (this.apiStatus) {
+      // トップページに移動する
+        this.$router.push('/')
+        // console.log(this.loginForm)
+      }
+      },
     async register () {
     // authストアのresigterアクションを呼び出すdispatch(action, actionの引数:フォームの入力値)
     // awaitは非同期通信
@@ -110,25 +129,11 @@ export default {
     clearError () {
       this.$store.commit('auth/setLoginErrorMessages', null)
       this.$store.commit('auth/setRegisterErrorMessages', null)
-    },
-
-    async login () {
-    // authストアのloginアクションを呼び出す
-    await this.$store.dispatch('auth/login', this.loginForm)
-
-      if(this.apiStatus){
-        // トップページに移動する
-        this.$router.push('/')
-        // console.log(this.loginForm)
-      }
-    },
-    clearError () {
-    this.$store.commit('auth/setLoginErrorMessages', null)
+    }
     },
     created () {
     this.clearError()
     }
-  },
 
 }
 </script>
